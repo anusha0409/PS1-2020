@@ -2,44 +2,44 @@
 <html lang="en">
 
 <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description"
-        content="A layout example with a side menu that hides on mobile, just like the Pure website.">
-    <title>STEMChat</title>
-    <link rel="manifest" href="./manifest.webmanifest" crossorigin="use-credentials">
-    <link rel="stylesheet" href="/css/pure_css.css">
-    <link rel="stylesheet" href="https://unpkg.com/purecss@2.0.3/build/grids-responsive-min.css" />
-    <link rel="stylesheet" href="css/blog.css">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>STEMChat</title>
+  <link rel="manifest" href="./manifest.webmanifest" crossorigin="use-credentials">
+  <link rel="shortcut icon" href="./favicon.ico">
+  <link rel="stylesheet" href="/css/pure_css.css">
+  <link rel="stylesheet" href="https://unpkg.com/purecss@2.0.3/build/grids-responsive-min.css" />
+  <link rel="stylesheet" href="css/blog.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 </head>
 
 <body>
 
-    <div class="topnav" id="myTopnav1">
-        <a href="javascript:void(0);" class="icon" onclick="myFunction1()">
-            <i>☰</i>
-        </a>
+  <div class="topnav" id="myTopnav1">
+    <a href="javascript:void(0);" class="icon" onclick="myFunction1()">
+      <i>☰</i>
+    </a>
 
-        <!-- Navigation links (hidden by default) -->
-        <div id="myLinks">
-            <a href='/' class="active">Groups</a>
-            <%if(curr_user){%>
-            <a href="<%=home%>" id='home'>Home</a>
-            <%}%>
-            <a href='<%=about%>'>About</a>
-            <a href='<%=blog%>'>Blogs</a>
-            <a href='<%=project%>'>Projects</a>
-            <a href='<%=feedback%>'>Feedback</a>
-            <%if(curr_user){%>
-            <a href='<%=profile%>'>Profile</a>
-            <%}%>
+    <!-- Navigation links (hidden by default) -->
+    <div id="myLinks">
+      <a href='/' class="active">Home</a>
+      <a href='<%=about%>'>About</a>
+      <%if(curr_user){%>
+      <a href="<%=home%>" id='home'>Chat</a>
+      <%}%>
+
+      <a href='<%=blog%>'>Blogs</a>
+      <a href='<%=project%>'>Projects</a>
+      <a href='<%=feedback%>'>Feedback</a>
+      <%if(curr_user){%>
+      <a href='<%=profile%>'>Profile</a>
+      <%}%>
             <%if(!curr_user){%>
-            <a href="<%=home%>">Login</a>
-            <%}%>
+      <a href="<%=home%>">Login</a>
+      <%}%>
             <%if(curr_user){%>
-            <a href="<%=logout%>">Logout</a>
-            <%}%>
+      <a href="<%=logout%>">Logout</a>
+      <%}%>
         </div>
         <!-- "Hamburger menu" / "Bar icon" to toggle the navigation links -->
 
@@ -59,82 +59,96 @@
 
         <div id="main">
           <div class="content pure-u-1 pure-u-md-1">
-              <div>
-                  <!-- A wrapper for all the blog posts -->
-                  <div class="posts">
-                    <h1>Latest Topics</h1>
 
-
-          <!-- A single blog post -->
-          <%for(var i=0;i<topics.length;i++){%>
-          <section class="post">
-              <header class="post-header">
-
-                  <h1 class="content-subhead"></h1>
-                  <a href="/post/t/<%=topics[i].title.split(' ').join('-')%>/<%=topics[i].id%>/1" data-topic-id="3682" class="link_head">
-                      <h1><%=topics[i].title.split('_').join(' ')%> <%if(topics[i].pinned){%>
-                        📌
-                      <%}%></h1>
-                  </a>
-
-
-                  <p class="post-meta">
-                    Post Count: <%=topics[i].posts_count%>
-                    <br>
-                    ❤️: <%=topics[i].like_count%>
-                  </p>
-              </header>
-
-              <div class="post-description elip_here">
-                  <p class="para">
-                      <%=topics[i].excerpt%>
-                  </p>
-              </div>
-
-          </section>
-          <%}%>
-        </div>
-      </div>
-      <br>
 
                 <div>
                     <!-- A wrapper for all the blog posts -->
                     <div class="posts">
                       <h1>Groups</h1>
-                        <%var k=0;%>
-
-            <!-- A single blog post -->
-            <%for(var i=0;i<groups.length;i++){%>
-            <%if(groups[i].automatic==false){%>
-
-            <section class="post">
-                <header class="post-header">
-
-                    <h1 class="content-subhead"></h1>
-                    <a href="/group/<%=groups[i].name%>/<%=groups[i].id%>" data-topic-id="3682" class="link_head">
-                        <h1><%=groups[i].name.split('_').join(' ')%></h1>
-
-                    </a>
 
 
-                    <p class="post-meta">
-                      User Count: <%=groups[i].user_count%>
-                    </p>
-                </header>
+      <!-- A single blog post -->
+      <%for(var i=0;i<groups.length;i++){%>
+      <%if(1==1){%>
+      <%if(groups[i].uploaded_logo!=null){%>
+      <%var str=groups[i].uploaded_logo.url;%>
+      <%str="https://t2.metastudio.org"+str;%>
+      <%}%>
+          <%if(groups[i].uploaded_logo==null){%>
+      <%str="stemlogo.png";%>
+      <%}%>
 
-                <div class="post-description elip_here">
-                    <p class="para">
-                        <%=groups[i].bio_raw%>
-                    </p>
-                  <button  class="myButton" type="button" name="button"> Request Membership</button>
-                </div>
 
-            </section>
-            <%k++;}}%>
 
-        </div>
+      <section class="post">
+        <header class="post-header">
+
+          <h1 class="content-subhead"></h1>
+          <a href="/group/<%=groups[i].slug%>/<%=groups[i].id%>" data-topic-id="3682" class="link_head">
+      <h1><%=groups[i].name.split('_').join(' ')%></h1>
+
+      </a>
+
+      <img height="100" width="100" id="plus2" src=<%=str%>>
+      <p class="post-meta">
+        Topic Count: <%=groups[i].topic_count%>
+      </p>
+      <p class="post-meta">
+        Post Count: <%=groups[i].post_count%>
+      </p>
+      </header>
+
+      <div class="post-description elip_here">
+        <p class="para">
+          <%=groups[i].description%>
+        </p>
 
       </div>
+
+      </section>
+      <%}}%>
+
+    </div>
+
+  </div>
+  <br>
+  <div>
+    <!-- A wrapper for all the blog posts -->
+    <div class="posts">
+      <h1>Latest Topics</h1>
+
+
+      <!-- A single blog post -->
+      <%for(var i=0;i<topics.length;i++){%>
+      <section class="post">
+        <header class="post-header">
+
+          <h1 class="content-subhead"></h1>
+          <a href="/post/t/<%=topics[i].title.split(' ').join('-').split('/').join('-')%>/<%=topics[i].id%>/1"
+            data-topic-id="3682" class="link_head">
+            <h1><%=topics[i].title.split('_').join(' ').split('/').join('-')%> <%if(topics[i].pinned){%>
+              📌
+              <%}%></h1>
+          </a>
+
+
+          <p class="post-meta">
+            Post Count: <%=topics[i].posts_count%>
+              <br>
+              ❤️: <%=topics[i].like_count%>
+              </p>
+        </header>
+
+        <div class="post-description elip_here">
+          <p class="para">
+            <%=topics[i].excerpt%>
+          </p>
+        </div>
+
+      </section>
+      <%}%>
+</div>
+</div>
       <img id="plus" src="plus.png">
     </div>
 
@@ -153,33 +167,55 @@
     </div>
     </div>
     </div>
-
     <div id="myModal" class="modal">
 
       <!-- Modal content -->
       <div class="modal-content">
-        <span class="close">✖</span>
-        <h1>Create Topic</h1>
-        <form action="/" method="POST">
+        <span  style="cursor:pointer" class="close">✖</span>
+        <center>
+        <center>
+        <h1 id='modal_head'>Create Topic</h1>
+        </center>
+        <form action="/" method="POST" id='topic_form'>
 
           <input type="text" name="title" required='' autocomplete="off" placeholder="Title"> <br>
-          <input type="text" name="desc" required='' autocomplete="off" placeholder="Description"> <br>
+          <textarea name="desc" required='' autocomplete="off" placeholder="Description"></textarea> <br>
           <select id = "multi-role" name='category' required="" placeholder='Select a Category'>
               <option value="" disabled selected>Select your Category</option>
           </select>
-          <br />
-          <input type="text" name="user_search" placeholder="Add User (for private chat)" list="users1" autocomplete="off">
+          <br>
+          <br>
+          <button class="button-tertiary" type="button" name="pvt_msg" id='pvt_msg'>Switch to Private Message</button>
+          <br>
+          <p align="right">
+          <button class="button-secondary" type="submit" id='on_but' name="compose_topic">Compose</button>
+          </p>
+        </form>
+
+        <form action="/" method="POST" id='pvt_msg_form'>
+
+          <input type="text" name="title" required='' autocomplete="off" placeholder="Title"> <br>
+          <textarea name="desc" required='' autocomplete="off" placeholder="Description"></textarea> <br>
+
+          <input type="text" name="user_search" placeholder="Add User" list="users1" autocomplete="off" required=''>
           <datalist id='users1'>
 
           </datalist>
           <br>
-          <button type="submit" id='on_but'>Create</button>
+          <br>
 
+          <button class="button-tertiary" type="button" name="topic" id='create_topic'>Switch to Create Topic</button>
+          <br>
+          <p align="right">
+          <button  class="button-secondary" type="submit" id='on_but' name="compose_pvt_msg">Compose</button>
+          </p>
         </form>
-
+      </center>
       </div>
 
     </div>
+
+
 
 
 
@@ -190,96 +226,111 @@
     <script src="/js/ui.js"></script>
 
     <script>
-      function alert_func(){
+      function alert_func() {
         alert('Kindly Login First');
       }
-         function myFunction1() {
-            var x = document.getElementById("myTopnav1");
-            if (x.className === "topnav") {
-                x.className += " responsive";
-            } else {
-                x.className = "topnav";
-            }
+      function myFunction1() {
+        var x = document.getElementById("myTopnav1");
+        if (x.className === "topnav") {
+          x.className += " responsive";
+        } else {
+          x.className = "topnav";
         }
-        function myFunction() {
-            var x = document.getElementById("myTopnav");
-            if (x.className === "topnav") {
-                x.className += " responsive";
-            } else {
-                x.className = "topnav";
-            }
+      }
+      function myFunction() {
+        var x = document.getElementById("myTopnav");
+        if (x.className === "topnav") {
+          x.className += " responsive";
+        } else {
+          x.className = "topnav";
         }
+      }
     </script>
     <script>
-        function _myFunction2() {
-            var x = document.getElementById("myLinks");
-            if (x.style.display === "block") {
-                x.style.display = "none";
-            } else {
-                x.style.display = "block";
-            }
+      function _myFunction2() {
+        var x = document.getElementById("myLinks");
+        if (x.style.display === "block") {
+          x.style.display = "none";
+        } else {
+          x.style.display = "block";
         }
-        // Get the modal
-    var modal = document.getElementById("myModal");
+      }
+      // Get the modal
+      var modal = document.getElementById("myModal");
 
-    // Get the button that opens the modal
-    var btn = document.getElementById("plus");
+      // Get the button that opens the modal
+      var btn = document.getElementById("plus");
 
 
-    // Get the <span> element that closes the modal
-    var span = document.getElementsByClassName("close")[0];
+      // Get the <span> element that closes the modal
+      var span = document.getElementsByClassName("close")[0];
 
-    // When the user clicks the button, open the modal
-    $(document).ready(function(){
-      btn.addEventListener('click',function() {
-        if( document.getElementById('home') ){
+      // When the user clicks the button, open the modal
+      $(document).ready(function () {
+        $('#pvt_msg_form').hide();
+
+        $('#create_topic').click(() => {
+          $('#modal_head').html('Create Topic');
+          $('#pvt_msg_form').hide();
+          $('#topic_form').show();
+        });
+        $('#pvt_msg').click(() => {
+          $('#modal_head').html('Create Private Message');
+          $('#pvt_msg_form').show();
+          $('#topic_form').hide();
+        });
+        btn.addEventListener('click', () => {
+          if (document.getElementById('home')) {
             modal.style.display = "block";
             $.ajax({
-              url:'/categories'
+              url: '/categories'
             }).done(
-              (data)=>{
+              (data) => {
                 $('select[name="category"] option').remove();
                 $('select[name="category"]').append('<option value=\"\" disabled selected>Select your Category</option>');
-                  for(var i=0;i<data.length;i++){
-                    $('select[name="category"]').append('<option value=\"'+data[i].id+'\">'+data[i].name+'</option>');
-                  }
+                for (var i = 0; i < data.length; i++) {
+                  $('select[name="category"]').append('<option value=\"' + data[i].id + '\">' + data[i].name + '</option>');
+                }
               }
             );
-        }else{
+          } else {
             alert_func();
-        }
-    });
-
-    $('input[name="user_search"]').keyup(()=>{
-      var text=$('input[name="user_search"]').val();
-      $.ajax({
-        url:'/find',
-        data:{text:text}
-      }).done(
-        (data)=>{
-          $('#users1 option').remove();
-          for(var i=0;i<data.length;i++){
-            var txt=data[i].name+' (@'+data[i].username+')';
-            $('#users1').append('<option value=\"'+data[i].username+'\">'+txt+'</option>');
           }
-        }
-      );
-    });
-  });
+        });
 
-    // When the user clicks on <span> (x), close the modal
-    span.onclick = function() {
-      modal.style.display = "none";
-    }
+        $('input[name="user_search"]').keyup(() => {
+          var text = $('input[name="user_search"]').val();
+          $.ajax({
+            url: '/find',
+            data: { text: text }
+          }).done(
+            (data) => {
+              $('#users1 option').remove();
+              for (var i = 0; i < data.length; i++) {
+                var txt = data[i].name + ' (@' + data[i].username + ')';
+                $('#users1').append('<option value=\"' + data[i].username + '\">' + txt + '</option>');
+              }
+            }
+          );
+        });
+      });
 
-    // When the user clicks anywhere outside of the modal, close it
-    window.onclick = function(event) {
-      if (event.target == modal) {
+
+
+      // When the user clicks on <span> (x), close the modal
+      span.onclick = function () {
         modal.style.display = "none";
       }
-    }
 
-  </script>
+      // When the user clicks anywhere outside of the modal, close it
+      window.onclick = function (event) {
+        if (event.target == modal) {
+          modal.style.display = "none";
+        }
+      }
+
+
+    </script>
 </body>
 
 
@@ -288,6 +339,52 @@
 
 
 <style>
+  .button-secondary {
+      background: rgb(28, 184, 65);
+      border-radius: 4px;
+      text-shadow: 0 1px 1px rgba(0, 0, 0, 0.2);
+      padding: 7px 11px;
+      
+      font-weight: bold;
+
+      border: none;
+      color: white;
+
+      text-align: center;
+      text-decoration: none;
+      display: inline-block;
+      font-size: 14px;
+    }
+    .button-tertiary {
+      
+  color: black; 
+  border: 2px solid black;
+  padding: 6px 10px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin: 4px 2px;
+  transition-duration: 0.4s;
+  cursor: pointer;
+}
+    .button-tertiary {
+  transition-duration: 0.4s;
+}
+
+.button-tertiary:hover {
+  background-color: #4CAF50; /* Green */
+  color: white;
+}
+  #plus{
+    right: 1.5rem;
+  }
+   #plus2 {
+        border-radius: 50%;
+        position: relative;
+        float: right;
+
+    }
     .tab {
         display: block;
         width: 115px;
@@ -318,22 +415,26 @@
         width: 5rem;
         position: fixed;
         bottom: 2.5rem;
-        right: 2.5rem;
+        right: 1.5rem;
         opacity: 0.5;
     }
 
     #plus:hover {
         opacity: 1.0;
     }
+
 }
 @media (max-width:600px)
 {
+  .modal-content{
+      width:80%
+    }
     #plus{
         width: 2.5rem;
         height: 2.5rem;
         position: fixed;
         bottom: 1rem;
-        right: 3.5rem;
+        right: 1.5rem;
         z-index: 100;
         opacity: 0.5;
     }

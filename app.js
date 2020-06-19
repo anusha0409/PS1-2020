@@ -8,8 +8,10 @@ const func=require('./functions.js');
 const md5 = require('md5');
 const session = require('express-session');
 const https=require("https");
+const passPhrase='Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed sapien urna, placerat ut erat eget, vehicula vestibulum quam. Quisque vitae ante quis purus eleifend dapibus. Suspendisse potenti. Donec ut ex quis purus pellentesque varius. Aenean eu velit nam.';
+const CryptoJS=require('crypto-js');
 
-const home = '/home';
+const home = '/chat';
 const home2='/home2';
 const feedback = '/feedback';
 const about = '/about';
@@ -20,11 +22,8 @@ const blog = '/blog';
 const logout = '/logout';
 const project = '/project';
 const profile='/profile';
-const activity='/activity';
-const notifications='/notifications';
 const badges='/badges';
-const messages='/messages';
-const pref='/preferences';
+
 
 app.set('views','./public/views');
 app.set('view engine', 'ejs');
@@ -62,10 +61,14 @@ app.get('/register', function (req, res) {
 app.post('/register', function (req, res) {
   let user=req.session.user;
   if(user){
-    res.redirect('/home');
+    res.redirect(home);
     return;
   }else{
   if (req.body.hasOwnProperty('signup')) {
+    var key=passPhrase;
+    var bytes=CryptoJS.AES.decrypt(req.body.pass1, key);
+    req.body.pass1=bytes.toString(CryptoJS.enc.Utf8);
+
     if(req.body.pass1.length <10){
       res.render('register.ejs',{status:'Password should be atleast 10 characters long'});
     }
@@ -74,6 +77,11 @@ app.post('/register', function (req, res) {
     func.addNewUser(req,res,new_user.name,new_user.email,new_user.password,new_user.userName,new_user.identity);
     }
   } else if (req.body.hasOwnProperty('login')) {
+
+    var key1=passPhrase;
+    var bytes1=CryptoJS.AES.decrypt(req.body.pass2, key1);
+    req.body.pass2=bytes1.toString(CryptoJS.enc.Utf8);
+
     var curr_user = func.resetCurrUser();
     curr_user.userName = req.body.username2;
     curr_user.password = req.body.pass2;
@@ -86,7 +94,7 @@ app.post('/register', function (req, res) {
 }
 });
 
-app.get('/home', function (req, res) {
+app.get('/chat', function (req, res) {
   res.set('Cache-Control', 'no-cache, private, no-store, must-revalidate, max-stale=0, post-check=0, pre-check=0');
   let curr_user=req.session.user;
   if (curr_user) {
@@ -97,17 +105,16 @@ app.get('/home', function (req, res) {
   }
 });
 app.get('/home2',function(req,res){
-res.render("home2.ejs", {
+res.render("home_old.ejs", {
   home: home, about: about, blog: blog , project: project, feedback: feedback , logout: logout , profile:profile});
 });
 
-app.post('/home',function(req,res){
+app.post('/chat',function(req,res){
   let user=req.session.user;
   //console.log(req.body);
 
   if(req.body.hasOwnProperty('search_button')){
     res.redirect('/search?text='+req.body.search_text);
-
   }
 });
 
@@ -339,39 +346,6 @@ app.get("/profile", function (req, res) {
   }
 });
 
-app.get("/activity", function (req, res) {
-  res.set('Cache-Control', 'no-cache, private, no-store, must-revalidate, max-stale=0, post-check=0, pre-check=0');
-  let curr_user=req.session.user;
-  if (curr_user) {
-    var obj={curr_user:curr_user,home: home, about: about, blog: blog, project: project, feedback: feedback, logout: logout};
-    res.render("activity.ejs", obj);
-  } else {
-    res.redirect('/register');
-  }
-});
-
-app.get("/notifications", function (req, res) {
-  res.set('Cache-Control', 'no-cache, private, no-store, must-revalidate, max-stale=0, post-check=0, pre-check=0');
-  let curr_user=req.session.user;
-  if (curr_user) {
-      var obj={  curr_user:curr_user,home: home, about: about, blog: blog, project: project, feedback: feedback, logout: logout};
-    res.render("notification.ejs", obj);
-  } else {
-    res.redirect('/register');
-  }
-});
-
-app.get("/messages", function (req, res) {
-  res.set('Cache-Control', 'no-cache, private, no-store, must-revalidate, max-stale=0, post-check=0, pre-check=0');
-  let curr_user=req.session.user;
-  if (curr_user) {
-      var obj={  curr_user:curr_user,home: home, about: about, blog: blog, project: project, feedback: feedback, logout: logout};
-    res.render("messages.ejs", obj);
-  } else {
-    res.redirect('/register');
-  }
-});
-
 app.get("/badges", function (req, res) {
   res.set('Cache-Control', 'no-cache, private, no-store, must-revalidate, max-stale=0, post-check=0, pre-check=0');
   let curr_user=req.session.user;
@@ -383,16 +357,6 @@ app.get("/badges", function (req, res) {
   }
 });
 
-app.get("/preferences", function (req, res) {
-  res.set('Cache-Control', 'no-cache, private, no-store, must-revalidate, max-stale=0, post-check=0, pre-check=0');
-  let curr_user=req.session.user;
-  if (curr_user) {
-      var obj={  curr_user:curr_user,home: home, about: about, blog: blog, project: project, feedback: feedback, logout: logout};
-    res.render("preferences.ejs",obj);
-  } else {
-    res.redirect('/register');
-  }
-});
 
 app.get('/logout', function (req, res) {
   let user=req.session.user;
@@ -417,8 +381,9 @@ app.get("/", function (req, res) {
 
 app.get("/group/:topic/:id", function (req, res) {
   let curr_user=req.session.user;
-  var id= req.params.topic;
-  func.fetch_Group(req, res, home, about, blog, project, feedback, logout, profile,id,curr_user);
+  var topic=req.params.topic;
+  var id= req.params.id;
+  func.fetch_Group(req, res, home, about, blog, project, feedback, logout, profile,topic,id,curr_user);
       // res.render("group",{Head:post.title,Para:post.content});
 });
 
@@ -480,14 +445,16 @@ app.post("/",function(req,res){
   let user=req.session.user;
   if(user){
 //  func.createGroup(req,res,item);
-    if(req.body.user_search===''){
+    if(req.body.hasOwnProperty('compose_topic') ){
       //public topics
-      //console.log('creating topic');
      func.create_topic(req,res);
+
     }
-    else{
+    else if(req.body.hasOwnProperty('compose_pvt_msg') ){
       //Create Private message
-      res.redirect('/');
+
+      func.pvt_msg(req,res);
+
     }
 
 }else{
@@ -495,6 +462,16 @@ app.post("/",function(req,res){
 }
 });
 
+app.post('/chatpost',(req,res)=>{
+  let user=req.session.user;
+  if(user){
+  if(req.body.hasOwnProperty('compose')){
+    func.pvt_msg(req,res);
+  }
+}else{
+  res.redirect('/');
+}
+});
 
 
 app.get("/group/:topic/:id/:offset", function (req, res) {
@@ -526,15 +503,16 @@ app.get("/group/:topic/:id/:offset", function (req, res) {
     });
 
 
-app.get("/group/:name/post/load/:offset", function (req, res) {
+app.get("/group/:name/:id/load/:offset", function (req, res) {
 
   let curr_user = req.session.user;
-  var id = req.params.name;
+  var name = req.params.name;
+  var id=req.params.id;
   var i=req.params.offset;
 
    var body3='';
-   var url2 = secrets.url + 'groups/' + id + '/posts' + '.json?'+'before_post_id='+i;
-  // console.log(url2);
+   var url2 = secrets.url + 'c/' + name+"/"+id + '.json'+'?page='+i;
+  //console.log(url2);
 
   var options = {
     method: 'GET',
@@ -549,6 +527,7 @@ app.get("/group/:name/post/load/:offset", function (req, res) {
     });
     response.on('end', function () {
       body3 = JSON.parse(body3);
+    //  console.log(body3.topic_list.topics);
       res.json(body3);
   });
      // console.log(body3);
@@ -672,4 +651,35 @@ app.get("/receive/:id",function(req,res){
      // console.log(body3);
 
       });
+});
+
+app.get('/groups.json',(req,res)=>{
+  var url=secrets.url+'/groups.json';
+  https.get(url,(response)=>{
+    if(response.statusCode===200){
+      var body='';
+      response.on('data',(data)=>{
+        body+=data;
+      });
+      response.on('end',()=>{
+        body=JSON.parse(body);
+
+        res.json(body.groups);
+      });
+    }
+  });
+});
+
+app.post('/group/:topic/:id/',(req,res)=>{
+  //console.log(req.body);
+
+  res.redirect('/group/'+req.params.topic+'/'+req.params.id);
+});
+
+app.get('/u/:uname',(req,res)=>{
+  res.redirect('/user/'+req.params.uname);
+});
+
+app.get('/t/:tname/:tid',(req,res)=>{
+  res.redirect('/post/t/'+req.params.tname+'/'+req.params.tid+'/1');
 });

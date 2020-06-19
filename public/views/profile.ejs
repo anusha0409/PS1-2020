@@ -4,7 +4,6 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="A layout example with a side menu that hides on mobile, just like the Pure website.">
   <title>STEMChat</title>
   <link rel="shortcut icon" href="./favicon.ico">
   <link rel="stylesheet" href="/css/pure_css.css">
@@ -21,15 +20,18 @@
 
       <!-- Navigation links (hidden by default) -->
       <div id="myLinks">
-        <a href='/profile' class="active">Profile</a>
+        <a href="/">Home</a>
+
+        <a href='<%=about%>'>About</a>
         <%if(curr_user_more){%>
-        <a href='<%=home%>'>Home</a>
+        <a href='<%=home%>'>Chat</a>
         <%}%>
-            <a href='<%=about%>'>About</a>
+
         <a href='<%=blog%>'>Blogs</a>
         <a href='<%=project%>'>Projects</a>
-        <a href="/">Groups</a>
         <a href='<%=feedback%>'>Feedback</a>
+        <a href='/profile' class="active">Profile</a>
+
         <%if(!curr_user_more){%>
         <a href='<%=home%>'>Login</a>
         <%}%>
@@ -42,11 +44,9 @@
     </div>
     <div class="topnav1" id="myTopnav">
       <a href='/profile' class='active'>Summary</a>
-        <a href='/activity'>Activity</a>
-        <a href='/notifications'>Notifications</a>
-        <a href='/messages'>Messages</a>
+
         <a href='/badges'>Badges</a>
-        <a href='/preferences'>Peferences</a>
+
 
 
         <a href="javascript:void(0);" class="icon" onclick="myFunction()">
@@ -111,6 +111,22 @@
                 </h4>
               </li>
               <%}%>
+
+              <%}%>
+            </ul>
+            <hr>
+            <h3>Topics</h3>
+            <ul>
+              <%for(var i=0;i<summary.topics.length;i++){%>
+
+              <li>
+                <h4>
+
+                  <a href='/post/t/<%=summary.topics[i].slug%>/<%=summary.topics[i].id%>/1'><%=summary.topics[i].title.split('_').join(' ')%> (Posts Count: <%=summary.topics[i].posts_count%>)</a>
+
+                </h4>
+              </li>
+
 
               <%}%>
             </ul>
